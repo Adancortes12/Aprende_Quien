@@ -14,4 +14,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Categorias.unity
     guid: b5f5158f59a93da4991a66b93ce25651
+  - enabled: 1
+    path: Assets/Scenes/Hdif.unity
+    guid: 040cd4fdaa6e1d84494f6bedf246adba
+  - enabled: 1
+    path: Assets/Scenes/facil.unity
+    guid: dc347ebcc018c744989d65a159a6f8ff
   m_configObjects: {}

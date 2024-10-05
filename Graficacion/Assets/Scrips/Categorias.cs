@@ -8,4 +8,7 @@ public class Categorias : MonoBehaviour
    public void Back(){
     SceneManager.LoadScene("Menu");
    }
+   public void Historia(){
+    SceneManager.LoadScene("Hdif");
+   }
 }
