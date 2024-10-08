@@ -8,7 +8,23 @@ public class DificultadHisto : MonoBehaviour
     public void Back(){
     SceneManager.LoadScene("Categorias");
    }
-   public void facil(){
-    SceneManager.LoadScene("facil");
-   }
+    // Referencia al panel de dificultad "medio"
+    public GameObject panelMedio;
+    public GameObject panelFacil;
+    public GameObject panelDificil;
+
+
+    // Método para mostrar el panel de dificultad media
+    public void Medio()
+    {
+        panelMedio.SetActive(true); // Activa el panel medio
+    }
+    public void facil()
+    {
+        panelFacil.SetActive(true); // Activa el panel medio
+    }
+    public void Dificil()
+    {
+        panelDificil.SetActive(true); // Activa el panel medio
+    }
 }

@@ -2,11 +2,17 @@ using UnityEngine;
 using UnityEngine.UI; // Agrega esta línea
 using System.Collections.Generic;
 using System.IO;
+using UnityEngine.SceneManagement;
 
 public class Aleatorias : MonoBehaviour
 {
      public string imagesFolderPath = "Assets/Personajes"; // Ruta de la carpeta de imágenes
     public List<Image> buttonImages; // Lista de componentes Image de los botones a los que se asignarán las imágenes
+    
+    public void Back()
+    {
+        SceneManager.LoadScene("Hdif");
+    }
 
     void Start()
     {
