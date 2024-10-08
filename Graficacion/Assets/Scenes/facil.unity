@@ -291,7 +291,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -100.000015, y: -135}
+  m_AnchoredPosition: {x: -119, y: -135}
   m_SizeDelta: {x: 200, y: 270}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &178671801
@@ -1454,7 +1454,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 127, y: -135}
+  m_AnchoredPosition: {x: 119, y: -135}
   m_SizeDelta: {x: 200, y: 270}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &951815236
@@ -1958,6 +1958,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2116096278}
+  - component: {fileID: 2116096279}
   m_Layer: 0
   m_Name: facil
   m_TagString: Untagged
@@ -1982,6 +1983,24 @@ Transform:
   - {fileID: 706280338}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2116096279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2116096277}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f81793a18246e4249b9f89925819f8d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  imagesFolderPath: Assets/Personajes
+  buttonImages:
+  - {fileID: 728632321}
+  - {fileID: 178671802}
+  - {fileID: 951815237}
+  - {fileID: 1420901950}
 --- !u!1 &2127012650
 GameObject:
   m_ObjectHideFlags: 0
