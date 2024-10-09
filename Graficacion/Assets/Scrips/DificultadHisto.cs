@@ -12,19 +12,27 @@ public class DificultadHisto : MonoBehaviour
     public GameObject panelMedio;
     public GameObject panelFacil;
     public GameObject panelDificil;
-
+     public GameObject panelAjustes;
 
     // Método para mostrar el panel de dificultad media
     public void Medio()
     {
-        panelMedio.SetActive(true); // Activa el panel medio
+        panelMedio.SetActive(true); // Activa el panel 
     }
     public void facil()
     {
-        panelFacil.SetActive(true); // Activa el panel medio
+        panelFacil.SetActive(true); // Activa el panel 
     }
     public void Dificil()
     {
-        panelDificil.SetActive(true); // Activa el panel medio
+        panelDificil.SetActive(true); // Activa el panel 
+    }
+    public void Ajustes()
+    {
+        panelAjustes.SetActive(true); // Activa el panel 
+    }
+    public void salir()
+    {
+        panelAjustes.SetActive(false); // Desactiva el panel 
     }
 }
