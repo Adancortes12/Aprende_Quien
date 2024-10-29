@@ -5,15 +5,17 @@ using System.IO;
 using TMPro;
 using UnityEngine.SceneManagement;
 
-
 public class Aleatorias : MonoBehaviour
 {
     public string imagesFolderPath = "Assets/Personajes";  // Ruta de la carpeta de imágenes
     public string pistasFilePath = "Assets/Pistas/Pistas.csv";  // Ruta del archivo CSV de pistas
     public List<Image> buttonImages;  // Lista de componentes Image de los botones
     public TextMeshProUGUI pistaText;  // Texto para mostrar la pista
+    public Button siguientePistaButton;  // Botón para mostrar la siguiente pista
 
     private Dictionary<int, List<string>> pistasPorPersonaje = new Dictionary<int, List<string>>();  // Diccionario de pistas por ID
+    private int personajeIDActual;  // ID del personaje actual
+    private int pistaIndexActual;  // Índice de la pista actual
 
     void Start()
     {
@@ -22,12 +24,15 @@ public class Aleatorias : MonoBehaviour
 
         // Mostrar automáticamente una pista para una de las imágenes al iniciar
         MostrarPistaDeImagenAleatoria();
+
+        // Asignar el método siguientePista al botón
+        siguientePistaButton.onClick.AddListener(SiguientePista);
     }
-       public void Back()
+
+    public void Back()
     {
         SceneManager.LoadScene("Hdif");
     }
-
 
     void CargarPistasDesdeCSV()
     {
@@ -88,9 +93,12 @@ public class Aleatorias : MonoBehaviour
     {
         if (pistasPorPersonaje.ContainsKey(personajeID))
         {
+            personajeIDActual = personajeID;  // Guardar el ID del personaje actual
+            pistaIndexActual = 0;  // Reiniciar el índice de la pista
+
             List<string> pistas = pistasPorPersonaje[personajeID];
-            string pistaAleatoria = pistas[Random.Range(0, pistas.Count)];  // Selecciona una pista aleatoria
-            pistaText.text = pistaAleatoria;
+            string pista = pistas[pistaIndexActual];  // Selecciona la primera pista
+            pistaText.text = pista;
         }
         else
         {
@@ -107,6 +115,21 @@ public class Aleatorias : MonoBehaviour
         if (int.TryParse(randomButtonImage.sprite.name, out int personajeID))
         {
             MostrarPista(personajeID);  // Usa el ID numérico de la imagen
+        }
+    }
+
+    void SiguientePista()
+    {
+        if (pistasPorPersonaje.ContainsKey(personajeIDActual))
+        {
+            List<string> pistas = pistasPorPersonaje[personajeIDActual];
+            pistaIndexActual = (pistaIndexActual + 1) % pistas.Count;  // Avanza al siguiente índice y reinicia si llega al final
+            string pista = pistas[pistaIndexActual];
+            pistaText.text = pista;
+        }
+        else
+        {
+            pistaText.text = "Pista no disponible para este personaje.";
         }
     }
 
