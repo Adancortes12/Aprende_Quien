@@ -12,11 +12,13 @@ public class Aleatorias : MonoBehaviour
     public List<Image> buttonImages;  // Lista de componentes Image de los botones
     public TextMeshProUGUI pistaText;  // Texto para mostrar la pista
     public TextMeshProUGUI contadorText; // Texto para mostrar el contador de pistas
+    public GameObject ganastePanel; // Panel "Ganaste"
 
     private Dictionary<int, List<string>> pistasPorPersonaje = new Dictionary<int, List<string>>();  // Diccionario de pistas por ID
     private int contadorPistas = 0;  // Contador de pistas vistas
     private int currentPersonajeID;  // ID del personaje actual
     private int currentPistaIndex = 0;  // Índice de la pista actual
+    private int selectedPersonajeID; // ID del personaje seleccionado por el jugador
 
     void Start()
     {
@@ -25,6 +27,7 @@ public class Aleatorias : MonoBehaviour
 
         // Mostrar automáticamente una pista para una de las imágenes al iniciar
         MostrarPistaDeImagenAleatoria();
+        ganastePanel.SetActive(false); // Asegurarse de que el panel "Ganaste" esté oculto al iniciar
     }
 
     public void Back()
@@ -81,10 +84,17 @@ public class Aleatorias : MonoBehaviour
                 // Convertir el nombre de la imagen (número) a un entero para buscar en el diccionario
                 if (int.TryParse(shuffledImages[i].name, out int personajeID))
                 {
-                    buttonImages[i].GetComponent<Button>().onClick.AddListener(() => { });
+                    int id = personajeID; // Captura la variable para usar en el lambda
+                    buttonImages[i].GetComponent<Button>().onClick.AddListener(() => SeleccionarPersonaje(id));
                 }
             }
         }
+    }
+
+    void SeleccionarPersonaje(int personajeID)
+    {
+        selectedPersonajeID = personajeID;
+        // No hacer nada más cuando se selecciona un personaje, solo almacenar el ID
     }
 
     void MostrarPista(int personajeID)
@@ -141,16 +151,28 @@ public class Aleatorias : MonoBehaviour
             else
             {
                 currentPistaIndex--;  // Mantén el índice en el límite si ya no hay más pistas
-                pistaText.text = "Agotastes las pistas";
+                pistaText.text = "No hay más pistas disponibles.";
             }
         }
     }
 
     void UpdateContadorText()
     {
-        int puntos = 510 - (contadorPistas * 10);//Calcula los puntos a restar 
-        if (puntos < 0) puntos = 0; //verifica no puntos negativos 
-        contadorText.text = "Puntos: " + puntos;//se asignan al text
+        int puntos = 500 - (contadorPistas * 10);
+        if (puntos < 0) puntos = 0; // Asegúrate de que los puntos no sean negativos
+        contadorText.text = "Puntos: " + puntos;
+    }
+
+    public void VerificarSeleccion()
+    {
+        if (selectedPersonajeID == currentPersonajeID)
+        {
+            ganastePanel.SetActive(true); // Muestra el panel "Ganaste"
+        }
+        else
+        {
+            // Aquí podrías agregar lógica para indicar que la selección fue incorrecta
+        }
     }
 
     List<Sprite> LoadSpritesFromFolder(string folderPath)
@@ -181,3 +203,4 @@ public class Aleatorias : MonoBehaviour
         }
     }
 }
+
