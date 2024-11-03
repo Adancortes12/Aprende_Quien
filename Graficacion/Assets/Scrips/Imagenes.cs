@@ -11,11 +11,12 @@ public class Aleatorias : MonoBehaviour
     public string pistasFilePath = "Assets/Pistas/Pistas.csv";  // Ruta del archivo CSV de pistas
     public List<Image> buttonImages;  // Lista de componentes Image de los botones
     public TextMeshProUGUI pistaText;  // Texto para mostrar la pista
-    public Button siguientePistaButton;  // Botón para mostrar la siguiente pista
+    public TextMeshProUGUI contadorText; // Texto para mostrar el contador de pistas
 
     private Dictionary<int, List<string>> pistasPorPersonaje = new Dictionary<int, List<string>>();  // Diccionario de pistas por ID
-    private int personajeIDActual;  // ID del personaje actual
-    private int pistaIndexActual;  // Índice de la pista actual
+    private int contadorPistas = 0;  // Contador de pistas vistas
+    private int currentPersonajeID;  // ID del personaje actual
+    private int currentPistaIndex = 0;  // Índice de la pista actual
 
     void Start()
     {
@@ -24,9 +25,6 @@ public class Aleatorias : MonoBehaviour
 
         // Mostrar automáticamente una pista para una de las imágenes al iniciar
         MostrarPistaDeImagenAleatoria();
-
-        // Asignar el método siguientePista al botón
-        siguientePistaButton.onClick.AddListener(SiguientePista);
     }
 
     public void Back()
@@ -83,7 +81,7 @@ public class Aleatorias : MonoBehaviour
                 // Convertir el nombre de la imagen (número) a un entero para buscar en el diccionario
                 if (int.TryParse(shuffledImages[i].name, out int personajeID))
                 {
-                    buttonImages[i].GetComponent<Button>().onClick.AddListener(() => MostrarPista(personajeID));
+                    buttonImages[i].GetComponent<Button>().onClick.AddListener(() => { });
                 }
             }
         }
@@ -93,12 +91,18 @@ public class Aleatorias : MonoBehaviour
     {
         if (pistasPorPersonaje.ContainsKey(personajeID))
         {
-            personajeIDActual = personajeID;  // Guardar el ID del personaje actual
-            pistaIndexActual = 0;  // Reiniciar el índice de la pista
-
             List<string> pistas = pistasPorPersonaje[personajeID];
-            string pista = pistas[pistaIndexActual];  // Selecciona la primera pista
-            pistaText.text = pista;
+            if (currentPistaIndex < pistas.Count)
+            {
+                string pista = pistas[currentPistaIndex];  // Obtiene la pista actual
+                pistaText.text = pista;
+                contadorPistas++;
+                UpdateContadorText();  // Actualiza el texto del contador
+            }
+            else
+            {
+                pistaText.text = "No hay más pistas disponibles.";
+            }
         }
         else
         {
@@ -114,23 +118,39 @@ public class Aleatorias : MonoBehaviour
 
         if (int.TryParse(randomButtonImage.sprite.name, out int personajeID))
         {
-            MostrarPista(personajeID);  // Usa el ID numérico de la imagen
+            currentPersonajeID = personajeID;  // Almacena el ID del personaje actual
+            currentPistaIndex = 0;  // Reinicia el índice de la pista
+            MostrarPista(currentPersonajeID);  // Usa el ID numérico de la imagen
         }
     }
 
-    void SiguientePista()
+    public void SiguientePista()
     {
-        if (pistasPorPersonaje.ContainsKey(personajeIDActual))
+        if (pistasPorPersonaje.ContainsKey(currentPersonajeID))
         {
-            List<string> pistas = pistasPorPersonaje[personajeIDActual];
-            pistaIndexActual = (pistaIndexActual + 1) % pistas.Count;  // Avanza al siguiente índice y reinicia si llega al final
-            string pista = pistas[pistaIndexActual];
-            pistaText.text = pista;
+            List<string> pistas = pistasPorPersonaje[currentPersonajeID];
+            currentPistaIndex++;  // Incrementa el índice de la pista
+
+            if (currentPistaIndex < pistas.Count)
+            {
+                string pista = pistas[currentPistaIndex];  // Obtiene la siguiente pista
+                pistaText.text = pista;
+                contadorPistas++;
+                UpdateContadorText();  // Actualiza el texto del contador
+            }
+            else
+            {
+                currentPistaIndex--;  // Mantén el índice en el límite si ya no hay más pistas
+                pistaText.text = "Agotastes las pistas";
+            }
         }
-        else
-        {
-            pistaText.text = "Pista no disponible para este personaje.";
-        }
+    }
+
+    void UpdateContadorText()
+    {
+        int puntos = 510 - (contadorPistas * 10);//Calcula los puntos a restar 
+        if (puntos < 0) puntos = 0; //verifica no puntos negativos 
+        contadorText.text = "Puntos: " + puntos;//se asignan al text
     }
 
     List<Sprite> LoadSpritesFromFolder(string folderPath)
