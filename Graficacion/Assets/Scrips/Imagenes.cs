@@ -13,12 +13,14 @@ public class Aleatorias : MonoBehaviour
     public TextMeshProUGUI pistaText;  // Texto para mostrar la pista
     public TextMeshProUGUI contadorText; // Texto para mostrar el contador de pistas
     public GameObject ganastePanel; // Panel "Ganaste"
+    public TextMeshProUGUI ganastepuntos;
 
     private Dictionary<int, List<string>> pistasPorPersonaje = new Dictionary<int, List<string>>();  // Diccionario de pistas por ID
     private int contadorPistas = 0;  // Contador de pistas vistas
     private int currentPersonajeID;  // ID del personaje actual
     private int currentPistaIndex = 0;  // Índice de la pista actual
     private int selectedPersonajeID; // ID del personaje seleccionado por el jugador
+    private Sprite xSprite; // Imagen de la X
 
     void Start()
     {
@@ -28,6 +30,9 @@ public class Aleatorias : MonoBehaviour
         // Mostrar automáticamente una pista para una de las imágenes al iniciar
         MostrarPistaDeImagenAleatoria();
         ganastePanel.SetActive(false); // Asegurarse de que el panel "Ganaste" esté oculto al iniciar
+
+        // Cargar la imagen de la X
+        xSprite = LoadXSprite();
     }
 
     public void Back()
@@ -158,9 +163,15 @@ public class Aleatorias : MonoBehaviour
 
     void UpdateContadorText()
     {
-        int puntos = 500 - (contadorPistas * 10);
+        int puntos = 510 - (contadorPistas * 10);
         if (puntos < 0) puntos = 0; // Asegúrate de que los puntos no sean negativos
         contadorText.text = "Puntos: " + puntos;
+        ganastepuntos.text="Puntos: "+ puntos;
+    }
+
+    public void volverAjugar()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void VerificarSeleccion()
@@ -172,6 +183,36 @@ public class Aleatorias : MonoBehaviour
         else
         {
             // Aquí podrías agregar lógica para indicar que la selección fue incorrecta
+        }
+    }
+
+    public void DescartarPersonaje()
+    {
+        // Encuentra el botón correspondiente al personaje seleccionado
+        foreach (Image buttonImage in buttonImages)
+        {
+            if (buttonImage.sprite.name == selectedPersonajeID.ToString())
+            {
+                buttonImage.sprite = xSprite;  // Cambia la imagen a una X
+                break;
+            }
+        }
+    }
+
+    Sprite LoadXSprite()
+    {
+        string xImagePath = Path.Combine(imagesFolderPath, "X.png");
+        if (File.Exists(xImagePath))
+        {
+            byte[] fileData = File.ReadAllBytes(xImagePath);
+            Texture2D tex = new Texture2D(2, 2);
+            tex.LoadImage(fileData);
+            return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+        }
+        else
+        {
+            Debug.LogError("La imagen de la X no se encontró en: " + xImagePath);
+            return null;
         }
     }
 
@@ -203,4 +244,5 @@ public class Aleatorias : MonoBehaviour
         }
     }
 }
+
 
