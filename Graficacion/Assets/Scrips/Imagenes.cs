@@ -7,32 +7,34 @@ using UnityEngine.SceneManagement;
 
 public class Aleatorias : MonoBehaviour
 {
-    public string imagesFolderPath = "Assets/Personajes";  // Ruta de la carpeta de imágenes
-    public string pistasFilePath = "Assets/Pistas/Pistas.csv";  // Ruta del archivo CSV de pistas
-    public List<Image> buttonImages;  // Lista de componentes Image de los botones
-    public TextMeshProUGUI pistaText;  // Texto para mostrar la pista
-    public TextMeshProUGUI contadorText; // Texto para mostrar el contador de pistas
-    public GameObject ganastePanel; // Panel "Ganaste"
+    public string imagesFolderPath = "Assets/Personajes";
+    public string pistasFilePath = "Assets/Pistas/Pistas.csv";
+    public List<Image> buttonImages;
+    public TextMeshProUGUI pistaText;
+    public TextMeshProUGUI contadorText;
+    public GameObject ganastePanel;
     public TextMeshProUGUI ganastepuntos;
+    public Button descartarButton;  // Añadir la referencia al botón "descartar"
 
-    private Dictionary<int, List<string>> pistasPorPersonaje = new Dictionary<int, List<string>>();  // Diccionario de pistas por ID
-    private int contadorPistas = 0;  // Contador de pistas vistas
-    private int currentPersonajeID;  // ID del personaje actual
-    private int currentPistaIndex = 0;  // Índice de la pista actual
-    private int selectedPersonajeID; // ID del personaje seleccionado por el jugador
-    private Sprite xSprite; // Imagen de la X
+    private Dictionary<int, List<string>> pistasPorPersonaje = new Dictionary<int, List<string>>();
+    private int contador = 0;
+    private int puntos = 0;
+    private int extra = 100;
+    private int penalizacion = 0;
+    private int currentPersonajeID;
+    private int currentPistaIndex = 0;
+    private int selectedPersonajeID;
+    private Sprite xSprite;
+    private Button botonSeleccionado; // Variable para el botón seleccionado
 
     void Start()
     {
-        CargarPistasDesdeCSV();  // Cargar las pistas desde el archivo CSV
-        AssignRandomImages();  // Asignar imágenes aleatorias a los botones
-
-        // Mostrar automáticamente una pista para una de las imágenes al iniciar
+        CargarPistasDesdeCSV();
+        AssignRandomImages();
         MostrarPistaDeImagenAleatoria();
-        ganastePanel.SetActive(false); // Asegurarse de que el panel "Ganaste" esté oculto al iniciar
-
-        // Cargar la imagen de la X
+        ganastePanel.SetActive(false);
         xSprite = LoadXSprite();
+        descartarButton.onClick.AddListener(Descartar); // Añadir listener para el botón "descartar"
     }
 
     public void Back()
@@ -45,20 +47,17 @@ public class Aleatorias : MonoBehaviour
         if (File.Exists(pistasFilePath))
         {
             string[] csvLines = File.ReadAllLines(pistasFilePath);
-            for (int i = 1; i < csvLines.Length; i++)  // Ignora la primera línea si es un encabezado
+            for (int i = 1; i < csvLines.Length; i++)
             {
                 string[] lineData = csvLines[i].Split(',');
 
                 if (int.TryParse(lineData[0].Trim(), out int personajeID))
                 {
-                    // Lista de pistas para el personaje
                     List<string> pistas = new List<string>();
-                    for (int j = 2; j < lineData.Length; j++)  // Empieza desde el índice 2
+                    for (int j = 2; j < lineData.Length; j++)
                     {
                         pistas.Add(lineData[j].Trim());
                     }
-
-                    // Agrega el ID del personaje y sus pistas al diccionario
                     pistasPorPersonaje[personajeID] = pistas;
                 }
                 else
@@ -79,27 +78,41 @@ public class Aleatorias : MonoBehaviour
         List<Sprite> shuffledImages = new List<Sprite>(characterImages);
         ShuffleList(shuffledImages);
 
-        // Asignar las imágenes a los botones y configurar eventos para mostrar pistas
         for (int i = 0; i < buttonImages.Count; i++)
         {
             if (i < shuffledImages.Count)
             {
                 buttonImages[i].sprite = shuffledImages[i];
-                
-                // Convertir el nombre de la imagen (número) a un entero para buscar en el diccionario
-                if (int.TryParse(shuffledImages[i].name, out int personajeID))
-                {
-                    int id = personajeID; // Captura la variable para usar en el lambda
-                    buttonImages[i].GetComponent<Button>().onClick.AddListener(() => SeleccionarPersonaje(id));
-                }
+                int personajeID = int.Parse(shuffledImages[i].name); // Asume que los nombres de las imágenes son números válidos
+                Button button = buttonImages[i].GetComponent<Button>();
+                button.onClick.AddListener(() => SeleccionarPersonaje(personajeID, button));
             }
         }
     }
 
-    void SeleccionarPersonaje(int personajeID)
+    void SeleccionarPersonaje(int personajeID, Button boton)
     {
         selectedPersonajeID = personajeID;
-        // No hacer nada más cuando se selecciona un personaje, solo almacenar el ID
+        botonSeleccionado = boton;
+    }
+
+    public void Descartar()
+    {
+        if (botonSeleccionado != null)
+        {
+            if (xSprite != null)
+            {
+                botonSeleccionado.image.sprite = xSprite;
+            }
+            else
+            {
+                Debug.LogError("xSprite es nulo. Asegúrate de que la imagen X se ha cargado correctamente.");
+            }
+        }
+        else
+        {
+            Debug.LogError("No se ha seleccionado ningún botón.");
+        }
     }
 
     void MostrarPista(int personajeID)
@@ -109,10 +122,10 @@ public class Aleatorias : MonoBehaviour
             List<string> pistas = pistasPorPersonaje[personajeID];
             if (currentPistaIndex < pistas.Count)
             {
-                string pista = pistas[currentPistaIndex];  // Obtiene la pista actual
+                string pista = pistas[currentPistaIndex];
                 pistaText.text = pista;
-                contadorPistas++;
-                UpdateContadorText();  // Actualiza el texto del contador
+                contador++;
+                UpdateContadorText();
             }
             else
             {
@@ -125,48 +138,51 @@ public class Aleatorias : MonoBehaviour
         }
     }
 
-    void MostrarPistaDeImagenAleatoria()
-    {
-        // Selecciona una imagen aleatoria de los botones y muestra la pista correspondiente
-        int randomButtonIndex = Random.Range(0, buttonImages.Count);
-        Image randomButtonImage = buttonImages[randomButtonIndex];
-
-        if (int.TryParse(randomButtonImage.sprite.name, out int personajeID))
-        {
-            currentPersonajeID = personajeID;  // Almacena el ID del personaje actual
-            currentPistaIndex = 0;  // Reinicia el índice de la pista
-            MostrarPista(currentPersonajeID);  // Usa el ID numérico de la imagen
-        }
-    }
-
     public void SiguientePista()
     {
-        if (pistasPorPersonaje.ContainsKey(currentPersonajeID))
+        if (contador > 4) 
         {
-            List<string> pistas = pistasPorPersonaje[currentPersonajeID];
-            currentPistaIndex++;  // Incrementa el índice de la pista
+            penalizacion = 100;  
+            extra = 0; 
+        } 
+        else if (contador == 4)
+        {
+            extra = 0; 
+        }
 
-            if (currentPistaIndex < pistas.Count)
-            {
-                string pista = pistas[currentPistaIndex];  // Obtiene la siguiente pista
-                pistaText.text = pista;
-                contadorPistas++;
-                UpdateContadorText();  // Actualiza el texto del contador
-            }
-            else
-            {
-                currentPistaIndex--;  // Mantén el índice en el límite si ya no hay más pistas
-                pistaText.text = "No hay más pistas disponibles.";
-            }
+        currentPistaIndex++;
+        MostrarPista(currentPersonajeID);
+    }
+
+    public void VerificarSeleccion()
+    {
+        if (contador > 4) 
+        {
+            penalizacion = 100;  
+            extra = 0; 
+        } 
+        else if (contador == 4)
+        {
+            extra = 0; 
+        }
+        if (selectedPersonajeID == currentPersonajeID)
+        {
+            puntos = 500 + (extra / (int)Mathf.Pow(2, contador - 1)) - penalizacion;
+            ganastePanel.SetActive(true);
+            ganastepuntos.text = "Puntos: " + puntos;
+            pistaText.text = "¡Has ganado!";
+        } 
+        else 
+        {
+            puntos = contador * 500 / 4 - penalizacion;
+            if (puntos < 0) puntos = 0;
+            pistaText.text = "Has perdido. Puntos: " + puntos;
         }
     }
 
     void UpdateContadorText()
     {
-        int puntos = 510 - (contadorPistas * 10);
-        if (puntos < 0) puntos = 0; // Asegúrate de que los puntos no sean negativos
-        contadorText.text = "Puntos: " + puntos;
-        ganastepuntos.text="Puntos: "+ puntos;
+        contadorText.text = "Pistas: " + contador;
     }
 
     public void volverAjugar()
@@ -174,34 +190,22 @@ public class Aleatorias : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    public void VerificarSeleccion()
+    void MostrarPistaDeImagenAleatoria()
     {
-        if (selectedPersonajeID == currentPersonajeID)
-        {
-            ganastePanel.SetActive(true); // Muestra el panel "Ganaste"
-        }
-        else
-        {
-            // Aquí podrías agregar lógica para indicar que la selección fue incorrecta
-        }
-    }
+        int randomButtonIndex = Random.Range(0, buttonImages.Count);
+        Image randomButtonImage = buttonImages[randomButtonIndex];
 
-    public void DescartarPersonaje()
-    {
-        // Encuentra el botón correspondiente al personaje seleccionado
-        foreach (Image buttonImage in buttonImages)
+        if (int.TryParse(randomButtonImage.sprite.name, out int personajeID))
         {
-            if (buttonImage.sprite.name == selectedPersonajeID.ToString())
-            {
-                buttonImage.sprite = xSprite;  // Cambia la imagen a una X
-                break;
-            }
+            currentPersonajeID = personajeID;
+            currentPistaIndex = 0;
+            MostrarPista(currentPersonajeID);
         }
     }
 
     Sprite LoadXSprite()
     {
-        string xImagePath = Path.Combine(imagesFolderPath, "X.png");
+        string xImagePath = Path.Combine("Assets/Imagenes", "X.png");
         if (File.Exists(xImagePath))
         {
             byte[] fileData = File.ReadAllBytes(xImagePath);
@@ -227,7 +231,7 @@ public class Aleatorias : MonoBehaviour
             Texture2D tex = new Texture2D(2, 2);
             tex.LoadImage(fileData);
             Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
-            sprite.name = Path.GetFileNameWithoutExtension(file);  // Usar el nombre del archivo como nombre del sprite
+            sprite.name = Path.GetFileNameWithoutExtension(file);
             sprites.Add(sprite);
         }
         return sprites;
@@ -244,5 +248,3 @@ public class Aleatorias : MonoBehaviour
         }
     }
 }
-
-

@@ -11,4 +11,5 @@ public class Categorias : MonoBehaviour
    public void Historia(){
     SceneManager.LoadScene("Hdif");
    }
+   
 }

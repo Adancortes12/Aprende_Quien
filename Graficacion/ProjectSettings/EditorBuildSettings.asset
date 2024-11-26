@@ -14,10 +14,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Categorias.unity
     guid: b5f5158f59a93da4991a66b93ce25651
-  - enabled: 0
-    path: Assets/Scenes/Historia.unity
-    guid: 040cd4fdaa6e1d84494f6bedf246adba
-  - enabled: 0
-    path: Assets/Scenes/Juego.unity
-    guid: dc347ebcc018c744989d65a159a6f8ff
+  - enabled: 1
+    path: Assets/Scenes/Hdif.unity
+    guid: 255c219ed6c5e094dbb61361f891d93e
+  - enabled: 1
+    path: Assets/Scenes/Gdif.unity
+    guid: d8eeaf231f55c1f46a7222b00e5f0daa
+  - enabled: 1
+    path: Assets/Scenes/facil.unity
+    guid: 9727a7ec86f508e4e9d337318206517c
   m_configObjects: {}
