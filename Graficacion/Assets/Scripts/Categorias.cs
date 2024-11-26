@@ -11,5 +11,9 @@ public class Categorias : MonoBehaviour
    public void Historia(){
     SceneManager.LoadScene("Hdif");
    }
+
+   public void Geografia(){
+      SceneManager.LoadScene("Gdif");
+   }
    
 }
