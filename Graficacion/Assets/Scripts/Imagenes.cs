@@ -7,16 +7,19 @@ using UnityEngine.SceneManagement;
 
 public class Aleatorias : MonoBehaviour
 {
-    public string imagesFolderPath = "Assets/Personajes";
-    public string pistasFilePath = "Assets/Pistas/Pistas.csv";
+    public string imagesFolderPath = "Assets/Personajes";  // Cambié a la carpeta de personajes
+    public string pistasFilePath = "Assets/Pistas/Pistas.csv";  // El archivo CSV con pistas de los personajes
     public List<Image> buttonImages;
+    public List<TextMeshProUGUI> personajeTexts;  // Lista para los textos de los personajes
     public TextMeshProUGUI pistaText;
     public TextMeshProUGUI contadorText;
     public GameObject ganastePanel;
+    public GameObject panelAjustes;
     public TextMeshProUGUI ganastepuntos;
-    public Button descartarButton;  // Añadir la referencia al botón "descartar"
+    public Button descartarButton;
 
-    private Dictionary<int, List<string>> pistasPorPersonaje = new Dictionary<int, List<string>>();
+    private Dictionary<int, List<string>> pistasPorPersonaje = new Dictionary<int, List<string>>();  // Diccionario de pistas por personaje
+    private Dictionary<int, string> personajes = new Dictionary<int, string>();  // Diccionario de personajes
     private int contador = 0;
     private int puntos = 0;
     private int extra = 100;
@@ -25,16 +28,33 @@ public class Aleatorias : MonoBehaviour
     private int currentPistaIndex = 0;
     private int selectedPersonajeID;
     private Sprite xSprite;
-    private Button botonSeleccionado; // Variable para el botón seleccionado
+    private Button botonSeleccionado;
 
     void Start()
     {
         CargarPistasDesdeCSV();
+        CargarPersonajes();  // Cargar los personajes
         AssignRandomImages();
         MostrarPistaDeImagenAleatoria();
         ganastePanel.SetActive(false);
+        panelAjustes.SetActive(false);
         xSprite = LoadXSprite();
-        descartarButton.onClick.AddListener(Descartar); // Añadir listener para el botón "descartar"
+        descartarButton.onClick.AddListener(Descartar);
+    }
+
+    public void Ajustes()
+    {
+        panelAjustes.SetActive(true); // Activa el panel 
+    }
+
+    public void cerrar()
+    {
+        panelAjustes.SetActive(false); // Desactiva el panel 
+    }
+
+    public void salir()
+    {
+        SceneManager.LoadScene("Hdif");
     }
 
     public void Back()
@@ -72,23 +92,60 @@ public class Aleatorias : MonoBehaviour
         }
     }
 
-    void AssignRandomImages()
+    void CargarPersonajes()
     {
-        List<Sprite> characterImages = LoadSpritesFromFolder(imagesFolderPath);
-        List<Sprite> shuffledImages = new List<Sprite>(characterImages);
-        ShuffleList(shuffledImages);
-
-        for (int i = 0; i < buttonImages.Count; i++)
+        personajes = new Dictionary<int, string>()
         {
-            if (i < shuffledImages.Count)
-            {
-                buttonImages[i].sprite = shuffledImages[i];
-                int personajeID = int.Parse(shuffledImages[i].name); // Asume que los nombres de las imágenes son números válidos
-                Button button = buttonImages[i].GetComponent<Button>();
-                button.onClick.AddListener(() => SeleccionarPersonaje(personajeID, button));
-            }
+            { 1, "Abraham Lincoln" },
+        { 2, "Alejandro Magno" },
+        { 3, "Camarena" },
+        { 4, "Cristobal Colon" },
+        { 5, "Davinci" },
+        { 6, "Einstein" },
+        { 7, "Frida Kahlo" },
+        { 8, "Galileo Galilei" },
+        { 9, "Isaac Newton" },
+        { 10, "Julio Cesar" },
+        { 11, "Karl Marx" },
+        { 12, "Napoleon Bonaparte" },
+        { 13, "Nelson Mandela" },
+        { 14, "Nikola Tesla" },
+        { 15, "Pablo Picasso" },
+        { 16, "Simon Bolivar" },
+        { 17, "Sor Juana" },
+        { 18, "William Shakespear" }
+        };
+    }
+
+    void AssignRandomImages()
+{
+    List<Sprite> personajeImages = LoadSpritesFromFolder(imagesFolderPath);
+    List<Sprite> shuffledImages = new List<Sprite>(personajeImages);
+    ShuffleList(shuffledImages);
+
+    // Asegúrate de que las listas tengan el mismo tamaño antes de acceder a ellas
+    int buttonCount = buttonImages.Count;
+    int imageCount = shuffledImages.Count;
+
+    for (int i = 0; i < buttonCount; i++)
+    {
+        if (i < imageCount)  // Solo asignar si hay suficientes imágenes
+        {
+            buttonImages[i].sprite = shuffledImages[i];
+            int personajeID = int.Parse(shuffledImages[i].name); // Usamos el nombre del archivo como ID del personaje
+            personajeTexts[i].text = personajes[personajeID];  // Asignamos el nombre del personaje al texto
+            Button button = buttonImages[i].GetComponent<Button>();
+            button.onClick.AddListener(() => SeleccionarPersonaje(personajeID, button));
+        }
+        else
+        {
+            // Si no hay más imágenes, puedes desactivar los botones restantes o manejarlo de otra manera
+            buttonImages[i].gameObject.SetActive(false);
+            personajeTexts[i].text = "";  // Limpiar el texto si no hay suficiente imagen
         }
     }
+}
+
 
     void SeleccionarPersonaje(int personajeID, Button boton)
     {

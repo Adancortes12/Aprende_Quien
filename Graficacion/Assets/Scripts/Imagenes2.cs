@@ -10,13 +10,16 @@ public class Aleatorias2 : MonoBehaviour
     public string imagesFolderPath = "Assets/banderas";
     public string pistasFilePath = "Assets/Pistas/PistasP.csv";
     public List<Image> buttonImages;
+    public List<TextMeshProUGUI> paisTexts;  // Lista para los textos que mostrarán los nombres de los países
     public TextMeshProUGUI pistaText;
     public TextMeshProUGUI contadorText;
     public GameObject ganastePanel;
+    public GameObject panelAjustes;
     public TextMeshProUGUI ganastepuntos;
     public Button descartarButton;  // Añadir la referencia al botón "descartar"
 
     private Dictionary<int, List<string>> pistasPorPersonaje = new Dictionary<int, List<string>>();
+    private Dictionary<int, string> paises = new Dictionary<int, string>();  // Diccionario de países
     private int contador = 0;
     private int puntos = 0;
     private int extra = 100;
@@ -30,17 +33,34 @@ public class Aleatorias2 : MonoBehaviour
     void Start()
     {
         CargarPistasDesdeCSV();
+        CargarPaises();  // Cargar la información de los países
         AssignRandomImages();
         MostrarPistaDeImagenAleatoria();
         ganastePanel.SetActive(false);
+        panelAjustes.SetActive(false);
         xSprite = LoadXSprite();
         descartarButton.onClick.AddListener(Descartar); // Añadir listener para el botón "descartar"
+    }
+    public void Ajustes()
+    {
+        panelAjustes.SetActive(true); // Activa el panel 
+    }
+
+    public void cerrar()
+    {
+        panelAjustes.SetActive(false); // Desactiva el panel 
+    }
+
+    public void salir()
+    {
+        SceneManager.LoadScene("gdif");
     }
 
     public void Back()
     {
-        SceneManager.LoadScene("Gdif");
+        SceneManager.LoadScene("gdif");
     }
+    
 
     void CargarPistasDesdeCSV()
     {
@@ -72,23 +92,68 @@ public class Aleatorias2 : MonoBehaviour
         }
     }
 
-    void AssignRandomImages()
+    void CargarPaises()
     {
-        List<Sprite> characterImages = LoadSpritesFromFolder(imagesFolderPath);
-        List<Sprite> shuffledImages = new List<Sprite>(characterImages);
-        ShuffleList(shuffledImages);
-
-        for (int i = 0; i < buttonImages.Count; i++)
+        paises = new Dictionary<int, string>()
         {
-            if (i < shuffledImages.Count)
-            {
-                buttonImages[i].sprite = shuffledImages[i];
-                int personajeID = int.Parse(shuffledImages[i].name); // Asume que los nombres de las imágenes son números válidos
-                Button button = buttonImages[i].GetComponent<Button>();
-                button.onClick.AddListener(() => SeleccionarPersonaje(personajeID, button));
-            }
+            {1, "Alemania"},
+            {2, "Arabia Saudita"},
+            {3, "Argentina"},
+            {4, "Australia"},
+            {5, "Brasil"},
+            {6, "Canadá"},
+            {7, "China"},
+            {8, "Colombia"},
+            {9, "Egipto"},
+            {10, "España"},
+            {11, "Etiopía"},
+            {12, "Fiyi"},
+            {13, "Francia"},
+            {14, "Italia"},
+            {15, "Japón"},
+            {16, "Nueva Zelanda"},
+            {17, "Papúa Nueva Guinea"},
+            {18, "Reino Unido"},
+            {19, "Samoa"},
+            {20, "Vietnam"}
+        };
+    }
+
+ void AssignRandomImages()
+{
+    List<Sprite> characterImages = LoadSpritesFromFolder(imagesFolderPath);
+    List<Sprite> shuffledImages = new List<Sprite>(characterImages);
+    ShuffleList(shuffledImages);
+
+    // Asegúrate de no exceder el número de botones
+    int buttonsCount = buttonImages.Count;
+    int imagesCount = shuffledImages.Count;
+    
+    // Compara los tamaños de las listas
+    int maxCount = Mathf.Min(buttonsCount, imagesCount);
+
+    for (int i = 0; i < maxCount; i++)
+    {
+        buttonImages[i].sprite = shuffledImages[i];
+        
+        // Asume que los nombres de las imágenes corresponden a los ID de los países
+        int personajeID = int.Parse(shuffledImages[i].name);  // Asegúrate de que el nombre del sprite sea un número válido
+        Button button = buttonImages[i].GetComponent<Button>();
+        button.onClick.AddListener(() => SeleccionarPersonaje(personajeID, button));
+
+        // Asigna el nombre del país correspondiente al TextMeshProUGUI
+        if (paises.ContainsKey(personajeID))
+        {
+            paisTexts[i].text = paises[personajeID];  // Asignamos el nombre del país al texto correspondiente
+        }
+        else
+        {
+            paisTexts[i].text = "País desconocido";  // Si no se encuentra el país, mostramos un mensaje por defecto
         }
     }
+}
+
+
 
     void SeleccionarPersonaje(int personajeID, Button boton)
     {
@@ -248,4 +313,3 @@ public class Aleatorias2 : MonoBehaviour
         }
     }
 }
-
