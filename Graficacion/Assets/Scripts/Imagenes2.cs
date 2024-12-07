@@ -39,7 +39,7 @@ public class Aleatorias2 : MonoBehaviour
 
     public void Back()
     {
-        SceneManager.LoadScene("Hdif");
+        SceneManager.LoadScene("Gdif");
     }
 
     void CargarPistasDesdeCSV()

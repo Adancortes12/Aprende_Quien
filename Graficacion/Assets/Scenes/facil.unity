@@ -924,8 +924,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1816327409}
-        m_TargetAssemblyTypeName: Aleatorias, Assembly-CSharp
+      - m_Target: {fileID: 1816327412}
+        m_TargetAssemblyTypeName: Aleatorias2, Assembly-CSharp
         m_MethodName: VerificarSeleccion
         m_Mode: 1
         m_Arguments:
@@ -1326,8 +1326,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1816327409}
-        m_TargetAssemblyTypeName: Aleatorias, Assembly-CSharp
+      - m_Target: {fileID: 1816327412}
+        m_TargetAssemblyTypeName: Aleatorias2, Assembly-CSharp
         m_MethodName: SiguientePista
         m_Mode: 1
         m_Arguments:
@@ -3585,8 +3585,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Aleatorias, Assembly-CSharp
+      - m_Target: {fileID: 1816327412}
+        m_TargetAssemblyTypeName: Aleatorias2, Assembly-CSharp
         m_MethodName: Descartar
         m_Mode: 1
         m_Arguments:
@@ -3871,7 +3871,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1816327411}
-  - component: {fileID: 1816327409}
+  - component: {fileID: 1816327412}
   m_Layer: 0
   m_Name: difi
   m_TagString: Untagged
@@ -3879,30 +3879,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1816327409
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1816327408}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f81793a18246e4249b9f89925819f8d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  imagesFolderPath: Assets/Personajes
-  pistasFilePath: Assets/Pistas/PistasP.csv
-  buttonImages:
-  - {fileID: 125331082}
-  - {fileID: 953866755}
-  - {fileID: 1012006455}
-  - {fileID: 464337965}
-  pistaText: {fileID: 43648227}
-  contadorText: {fileID: 1691651086}
-  ganastePanel: {fileID: 1356618943}
-  ganastepuntos: {fileID: 0}
-  descartarButton: {fileID: 1546738623}
 --- !u!4 &1816327411
 Transform:
   m_ObjectHideFlags: 0
@@ -3919,6 +3895,30 @@ Transform:
   - {fileID: 2055612827}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1816327412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1816327408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01e5fe700376927428da1c0df8734cb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  imagesFolderPath: Assets/banderas
+  pistasFilePath: Assets/Pistas/PistasP.csv
+  buttonImages:
+  - {fileID: 125331082}
+  - {fileID: 953866755}
+  - {fileID: 1012006455}
+  - {fileID: 464337965}
+  pistaText: {fileID: 43648227}
+  contadorText: {fileID: 1691651086}
+  ganastePanel: {fileID: 1356618943}
+  ganastepuntos: {fileID: 1476684399}
+  descartarButton: {fileID: 1546738623}
 --- !u!1 &1997224953
 GameObject:
   m_ObjectHideFlags: 0
@@ -4249,8 +4249,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1816327409}
-        m_TargetAssemblyTypeName: Aleatorias, Assembly-CSharp
+      - m_Target: {fileID: 1816327412}
+        m_TargetAssemblyTypeName: Aleatorias2, Assembly-CSharp
         m_MethodName: Back
         m_Mode: 1
         m_Arguments:
