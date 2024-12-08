@@ -15,6 +15,7 @@ public class Aleatorias : MonoBehaviour
     public TextMeshProUGUI contadorText;
     public GameObject ganastePanel;
     public GameObject panelAjustes;
+    public GameObject perdistePanel;
     public TextMeshProUGUI ganastepuntos;
     public Button descartarButton;
 
@@ -37,6 +38,7 @@ public class Aleatorias : MonoBehaviour
         AssignRandomImages();
         MostrarPistaDeImagenAleatoria();
         ganastePanel.SetActive(false);
+        perdistePanel.SetActive(false);
         panelAjustes.SetActive(false);
         xSprite = LoadXSprite();
         descartarButton.onClick.AddListener(Descartar);
@@ -122,6 +124,7 @@ public class Aleatorias : MonoBehaviour
     List<Sprite> personajeImages = LoadSpritesFromFolder(imagesFolderPath);
     List<Sprite> shuffledImages = new List<Sprite>(personajeImages);
     ShuffleList(shuffledImages);
+    botonSeleccionado = null;
 
     // Asegúrate de que las listas tengan el mismo tamaño antes de acceder a ellas
     int buttonCount = buttonImages.Count;
@@ -154,23 +157,32 @@ public class Aleatorias : MonoBehaviour
     }
 
     public void Descartar()
+{
+    if (botonSeleccionado != null)
     {
-        if (botonSeleccionado != null)
+        if (xSprite != null)
         {
-            if (xSprite != null)
+            botonSeleccionado.image.sprite = xSprite;
+
+            // Verifica si el personaje seleccionado es el correcto y si se ha descartado
+            if (selectedPersonajeID == currentPersonajeID)
             {
-                botonSeleccionado.image.sprite = xSprite;
-            }
-            else
-            {
-                Debug.LogError("xSprite es nulo. Asegúrate de que la imagen X se ha cargado correctamente.");
+                puntos = 0; // El jugador pierde si se descarta la imagen correcta
+                pistaText.text = "¡Has perdido!";
+                perdistePanel.SetActive(true);  // Mostrar el panel perdiste
             }
         }
         else
         {
-            Debug.LogError("No se ha seleccionado ningún botón.");
+            Debug.LogError("xSprite es nulo. Asegúrate de que la imagen X se ha cargado correctamente.");
         }
     }
+    else
+    {
+        Debug.LogError("No se ha seleccionado ningún botón.");
+    }
+}
+
 
     void MostrarPista(int personajeID)
     {
@@ -211,41 +223,53 @@ public class Aleatorias : MonoBehaviour
         MostrarPista(currentPersonajeID);
     }
 
-    public void VerificarSeleccion()
+  public void VerificarSeleccion()
+{
+    if (contador > 4) 
     {
-        if (contador > 4) 
-        {
-            penalizacion = 100;  
-            extra = 0; 
-        } 
-        else if (contador == 4)
-        {
-            extra = 0; 
-        }
-        if (selectedPersonajeID == currentPersonajeID)
-        {
-            puntos = 500 + (extra / (int)Mathf.Pow(2, contador - 1)) - penalizacion;
-            ganastePanel.SetActive(true);
-            ganastepuntos.text = "Puntos: " + puntos;
-            pistaText.text = "¡Has ganado!";
-        } 
-        else 
-        {
-            puntos = contador * 500 / 4 - penalizacion;
-            if (puntos < 0) puntos = 0;
-            pistaText.text = "Has perdido. Puntos: " + puntos;
-        }
+        penalizacion = 100;  
+        extra = 0; 
+    } 
+    else if (contador == 4)
+    {
+        extra = 0; 
     }
+
+    if (botonSeleccionado == null || botonSeleccionado.image.sprite == xSprite)
+    {
+        // Si el botón seleccionado es null o la imagen ha sido cambiada por la X, el jugador ha perdido
+        puntos = 0;
+        pistaText.text = "¡Has perdido!";
+        perdistePanel.SetActive(true);  // Mostrar el panel perdiste
+    }
+    else if (selectedPersonajeID == currentPersonajeID)
+    {
+        puntos = 500 + (extra / (int)Mathf.Pow(2, contador - 1)) - penalizacion;
+        ganastePanel.SetActive(true);
+        ganastepuntos.text = "Puntos: " + puntos;
+        pistaText.text = "¡Has ganado!";
+    } 
+    else 
+    {
+        puntos = contador * 500 / 4 - penalizacion;
+        if (puntos < 0) puntos = 0;
+        pistaText.text = "Has perdido. Puntos: " + puntos;
+    }
+}
+
+
+public void volverAjugar()
+{
+    
+    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+}
 
     void UpdateContadorText()
     {
         contadorText.text = "Pistas: " + contador;
     }
 
-    public void volverAjugar()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
+    
 
     void MostrarPistaDeImagenAleatoria()
     {

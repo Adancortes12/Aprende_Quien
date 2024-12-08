@@ -3746,7 +3746,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &589170766
 Transform:
   m_ObjectHideFlags: 0
@@ -3808,6 +3808,7 @@ MonoBehaviour:
   contadorText: {fileID: 1905638104}
   ganastePanel: {fileID: 352916477}
   panelAjustes: {fileID: 2101137398}
+  perdistePanel: {fileID: 1724377997}
   ganastepuntos: {fileID: 2045194344}
   descartarButton: {fileID: 615163801}
 --- !u!1 &609721084
@@ -4379,6 +4380,7 @@ MonoBehaviour:
   contadorText: {fileID: 0}
   ganastePanel: {fileID: 0}
   panelAjustes: {fileID: 0}
+  perdistePanel: {fileID: 0}
   ganastepuntos: {fileID: 0}
   descartarButton: {fileID: 0}
 --- !u!1 &637240061
@@ -12780,7 +12782,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1905071374
 Transform:
   m_ObjectHideFlags: 0
@@ -12826,6 +12828,7 @@ MonoBehaviour:
   contadorText: {fileID: 184817524}
   ganastePanel: {fileID: 352916477}
   panelAjustes: {fileID: 2101137398}
+  perdistePanel: {fileID: 1724377997}
   ganastepuntos: {fileID: 2045194344}
   descartarButton: {fileID: 854968291}
 --- !u!1 &1905638103
@@ -14571,7 +14574,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2116063290
 Transform:
   m_ObjectHideFlags: 0
@@ -14625,6 +14628,7 @@ MonoBehaviour:
   contadorText: {fileID: 1014276745}
   ganastePanel: {fileID: 352916477}
   panelAjustes: {fileID: 2101137398}
+  perdistePanel: {fileID: 1724377997}
   ganastepuntos: {fileID: 2045194344}
   descartarButton: {fileID: 1003747938}
 --- !u!114 &2116063292
