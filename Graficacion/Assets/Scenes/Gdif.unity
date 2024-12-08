@@ -785,7 +785,6 @@ RectTransform:
   - {fileID: 1681761762}
   - {fileID: 1503614483}
   - {fileID: 901207090}
-  - {fileID: 1708343208}
   m_Father: {fileID: 1544631361}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1410,9 +1409,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: DificultadHisto, Assembly-CSharp
-        m_MethodName: salir
+      - m_Target: {fileID: 1544631362}
+        m_TargetAssemblyTypeName: DificultadGeo, Assembly-CSharp
+        m_MethodName: cerrar
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2230,7 +2229,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1272330123}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1544631362}
+        m_TargetAssemblyTypeName: DificultadGeo, Assembly-CSharp
+        m_MethodName: salir
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1272330123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2486,8 +2497,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: DificultadHisto, Assembly-CSharp
+      - m_Target: {fileID: 1544631362}
+        m_TargetAssemblyTypeName: DificultadGeo, Assembly-CSharp
         m_MethodName: Ajustes
         m_Mode: 1
         m_Arguments:
@@ -2793,6 +2804,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 924a22c92d8f32742adc5058b92ffecc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  panelAjustes: {fileID: 1503614482}
 --- !u!1 &1671181695
 GameObject:
   m_ObjectHideFlags: 0
@@ -2962,6 +2974,7 @@ RectTransform:
   - {fileID: 294822557}
   - {fileID: 1344399852}
   - {fileID: 1962235384}
+  - {fileID: 1708343208}
   m_Father: {fileID: 582534100}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -3032,12 +3045,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1708343207}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 582534100}
+  m_Father: {fileID: 1681761762}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -3432,8 +3445,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: DificultadHisto, Assembly-CSharp
+      - m_Target: {fileID: 1544631362}
+        m_TargetAssemblyTypeName: DificultadGeo, Assembly-CSharp
         m_MethodName: Back
         m_Mode: 1
         m_Arguments:
